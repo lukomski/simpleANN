@@ -7,7 +7,7 @@ function getPreparedDataset(dataX, dataY)
     Y = []
 
     for i = 1:collectionSize
-        push!(X, reshape(dataX[:, :, i], inputWidth))
+        @views push!(X, reshape(dataX[:, :, i], inputWidth))
         y = zeros(10)
         y[dataY[i]+1] = 1.0
         push!(Y, y)
