@@ -25,4 +25,11 @@ function getTrainDataset(dataset)
     train_x, train_y = dataset.traindata(Float64)
     DatasetCommon.getPreparedDataset(train_x, train_y)
 end
+
+mutable struct DatasetBase
+    classes::Any
+    test::Any
+    train::Any
+    DatasetBase(train, test, classes) = new(classes, test, train)
+end
 end

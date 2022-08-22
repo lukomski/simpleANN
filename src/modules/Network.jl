@@ -274,10 +274,10 @@ struct Weights
     Wh1::Variable
     Wh2::Variable
     Wo::Variable
-    Weights() = new(
-        Variable(randn(32, 784), name="Wh1"),
+    Weights(input_length::Int64, class_number::Int64) = new(
+        Variable(randn(32, input_length), name="Wh1"),
         Variable(randn(32, 32), name="Wh2"),
-        Variable(randn(10, 32), name="Wo"),
+        Variable(randn(class_number, 32), name="Wo"),
     )
 end
 
@@ -305,24 +305,6 @@ end
 function getStringOfSuccessPercentage(data_set, weights)
     return string("Percentage of correctly classified images is: ",
         success_percentage(data_set, weights), " %")
-end
-
-
-
-function getTestDataset()
-    test_x, test_y = MNIST.testdata(Float64)
-
-    X = []
-    Y = []
-
-    for i = 1:10000
-        push!(X, reshape(test_x[:, :, i], 784))
-        y = zeros(10)
-        y[test_y[i]+1] = 1.0
-        push!(Y, y)
-    end
-
-    test_data = [x for x in zip(X, Y)]
 end
 
 function update_weights!(x, weights::Weights, y, lr=0.4)

@@ -17,4 +17,17 @@ end
 function getTrainDataset()
     DatasetCommon.getTrainDataset(getDataset())
 end
+
+function getClasses()
+    classes = sort(unique(MLDatasets.FashionMNIST.testdata(Float64)[2]))
+    return classes
+end
+
+function createDatasetBase()
+    return DatasetCommon.DatasetBase(
+        getTrainDataset(),
+        getTestDataset(),
+        getClasses()
+    )
+end
 end
