@@ -9,7 +9,7 @@ _Julia lang_
 ### 1. Go to src/netjl directory
 
 ```
-cd src/netjl network
+cd src/netjl
 ```
 
 ### 2. Run main file
