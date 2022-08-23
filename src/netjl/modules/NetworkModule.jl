@@ -1,6 +1,7 @@
 module NetworkModule
 using GraphModule
 using WeightsModule
+export net, sigmoid, softmax
 
 #
 # Functions
@@ -64,5 +65,17 @@ function train(weights::Weights, train, test, epochs::Int)
         end
     end
     return weights
+end
+
+function test(data_sets, weights::Weights)
+    predicted_classes = []
+    expected_classes = []
+    for x in data_sets
+        predicted_class = predict_digit(Constant(x[1]), weights)
+        expected_class = argmax(x[2]) - 1
+        push!(predicted_classes, predicted_class)
+        push!(expected_classes, expected_class)
+    end
+    return zip(data_sets, predicted_classes, expected_classes)
 end
 end

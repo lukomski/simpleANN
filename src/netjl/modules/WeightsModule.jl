@@ -1,6 +1,7 @@
 module WeightsModule
 using GraphModule
 export Weights
+export loadFromFile
 
 
 struct Weights
@@ -22,6 +23,10 @@ struct Checkpoint
         weights,
         Dates.Time(Dates.now())
     )
+    Checkpoint(weights, datetime) = new(
+        weights,
+        datetime
+    )
 end
 
 using JLD2
@@ -31,6 +36,8 @@ function saveToFile(weights::Weights, destination::String)
 end
 
 function loadFromFile(source::String)
-    return load_object(source)
+    object = load_object(source)
+    checkpoint = Checkpoint(object.weights, object.datetime)
+    return checkpoint
 end
 end

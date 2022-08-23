@@ -18,12 +18,12 @@ end
 
 function getTestDataset(dataset)
     test_x, test_y = dataset.testdata(Float64)
-    DatasetCommon.getPreparedDataset(test_x, test_y)
+    getPreparedDataset(test_x, test_y)
 end
 
 function getTrainDataset(dataset)
     train_x, train_y = dataset.traindata(Float64)
-    DatasetCommon.getPreparedDataset(train_x, train_y)
+    getPreparedDataset(train_x, train_y)
 end
 
 mutable struct DatasetBase

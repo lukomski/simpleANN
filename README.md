@@ -4,15 +4,27 @@ _Julia lang_
 
 ![Julia lang Logo](docs/julia-lang.png "Julia Logo")
 
-## Run netjl
+---
 
-### 1. Go to src/netjl directory
+## Run netjl network
 
 ```
-cd src/netjl
+julia src/netjl/main.jl
 ```
 
-### 2. Run main file
+or alternatively open the main file and click Run button for Julia REPL
+
+---
+
+## Run netpp network
+
+### 1. Go to src/netpp directory
+
+```
+cd src/netpp
+```
+
+### 2. Run main script
 
 ```
 julia main.jl
