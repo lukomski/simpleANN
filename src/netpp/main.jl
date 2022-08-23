@@ -11,7 +11,7 @@ import Iris
 
 ############### CONFIGURATION
 dataset = FashionMNIST
-epochs = 5
+epochs = 1
 lr = 0.4
 ###############
 
@@ -205,34 +205,7 @@ Base.Broadcast.broadcasted(+, x::GraphNode, y::GraphNode) = BroadcastedOperator(
 forward(::BroadcastedOperator{typeof(+)}, x, y) = return x .+ y
 backward(::BroadcastedOperator{typeof(+)}, x, y, g) = tuple(g, g)
 
-# using MLDatasets
-
-# train_x, train_y = MNIST.traindata(Float64);
-# test_x, test_y = MNIST.testdata(Float64);
-
-# X = []; 
-# Y = []; 
-
-# for i = 1 : 60000
-#     @views push!(X, reshape(train_x[:,:,i],784));
-#     y = zeros(10);
-#     y[train_y[i] + 1] = 1.0; 
-#     push!(Y,y);
-# end
-
-# train_data = [x for x in zip(X,Y)];
-
-# X = []; 
-# Y = []; 
-
-# for i = 1 : 10000
-#     @views push!(X, reshape(test_x[:,:,i],784));
-#     y = zeros(10);
-#     y[test_y[i] + 1] = 1.0; 
-#     push!(Y,y);
-# end
-
-# test_data = [x for x in zip(X,Y)];
+### Network module
 
 datasetBase = dataset.createDatasetBase()
 train_data = datasetBase.train
@@ -253,9 +226,9 @@ bh2 = Variable(randn(32), name="bh2")
 Wo = Variable(randn(out_layer_width,32), name="Wo")
 bo = Variable(randn(out_layer_width), name="bo")
 
-get_digit(y::Vector) = argmax(y) - 1
+get_class(y::Vector) = argmax(y) - 1
 
-function predict_digit(x, Wh1, bh1, Wh2, bh2, Wo, bo)
+function predict(x, Wh1, bh1, Wh2, bh2, Wo, bo)
     x1 = (Wh1 * x .+ bh1);
     x̂1 = sigmoid(x1);
     x2 = (Wh2 * x̂1 .+ bh2);
@@ -264,12 +237,23 @@ function predict_digit(x, Wh1, bh1, Wh2, bh2, Wo, bo)
     ŷ = sigmoid(x3);
     graph = topological_sort(ŷ)
     forward!(graph)
-    get_digit(ŷ.output)
+    get_class(ŷ.output)
 end
 
-function success_percentage(data_set)
-    return string("Percentage of correctly classified images is: ", 
-        sum([ predict_digit(Constant(x[1]), Wh1, bh1, Wh2, bh2, Wo, bo) == get_digit(x[2]) ? 1 : 0 for x in data_set])/length(data_set)*100, " %")
+function accuracy(data_set)
+    return sum([ predict(Constant(x[1]), Wh1, bh1, Wh2, bh2, Wo, bo) == get_class(x[2]) ? 1 : 0 for x in data_set])/length(data_set)*100
+end
+
+function precision(data_set)
+    precision_list = []
+
+
+    for i in train_data
+        prediction = predict(Constant(i[1]), Wh1, bh1, Wh2, bh2, Wo, bo)
+        correct_class = get_class(i[2])
+
+
+    end
 end
 
 one = Constant(1.0)
@@ -308,9 +292,9 @@ loss_list = []
 
 for epoch in 1:epochs
     loss = 0.0
-    for i = 1:length(train_data)
-        x = Constant(train_data[i][1])
-        y = Constant(train_data[i][2])
+    for i in train_data
+        x = Constant(i[1])
+        y = Constant(i[2])
         train!(x, Wh1, bh1, Wh2, bh2, Wo, bo, y, lr, loss)
         push!(loss_list, loss)
     end
@@ -318,5 +302,5 @@ for epoch in 1:epochs
 end
 
 println("Result:")
-println("Wynik danych testowych: ", success_percentage(test_data))
-println("Wynik danych treningowych: ", success_percentage(train_data))
+println("Wynik danych testowych: ", accuracy(test_data))
+println("Wynik danych treningowych: ", accuracy(train_data))
