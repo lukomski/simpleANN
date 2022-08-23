@@ -2,6 +2,8 @@
 # Network module
 ###
 
+using Statistics
+
 get_class(y::Vector) = argmax(y) - 1
 
 function predict(x, Wh1, bh1, Wh2, bh2, Wo, bo)
@@ -20,16 +22,39 @@ function accuracy(data_set)
     return sum([ predict(Constant(x[1]), Wh1, bh1, Wh2, bh2, Wo, bo) == get_class(x[2]) ? 1 : 0 for x in data_set])/length(data_set)*100
 end
 
-function precision(data_set)
-    precision_list = []
+function metrics(data_set, number_of_classes)
 
+    prediction_list_all = zeros(number_of_classes)
+    prediction_list_correct = zeros(number_of_classes)
+    correct_list_all = zeros(number_of_classes)
+    #println(prediction_list_all)
+    #println(prediction_list_correct)
+    #println(correct_list_all)
 
-    for i in train_data
+    for i in data_set
         prediction = predict(Constant(i[1]), Wh1, bh1, Wh2, bh2, Wo, bo)
         correct_class = get_class(i[2])
 
-
+        prediction_list_all[prediction + 1] += 1
+        correct_list_all[correct_class + 1] += 1
+        if (prediction == correct_class)
+            prediction_list_correct[prediction + 1] += 1
+        end
     end
+
+    println(prediction_list_all)
+    println(prediction_list_correct)
+    println(correct_list_all)
+
+    data_set_size = length(data_set)
+    precision = mean(prediction_list_correct./prediction_list_all)
+    recall = mean(prediction_list_correct./correct_list_all)
+    println("Accuracy: ", sum(prediction_list_correct./data_set_size)*100, "%")
+    println("Precision: ", precision * 100, "%")
+    println("Recall: ", recall * 100, "%")
+    println("F1: ", 2*(precision*recall/(precision+recall)))
+
+    return nothing
 end
 
 one = Constant(1.0)

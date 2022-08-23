@@ -13,8 +13,8 @@ include("modules/graph.jl")
 include("modules/network.jl")
 
 ############### CONFIGURATION
-dataset = FashionMNIST
-epochs = 1
+dataset = DigitMNIST
+epochs = 5
 lr = 0.4
 ###############
 
@@ -51,8 +51,5 @@ for epoch in 1:epochs
         push!(loss_list, loss)
     end
     #println("Epoch ", epoch, " Loss is: ", loss, "\n")
+    metrics(test_data, out_layer_width)
 end
-
-println("Result:")
-println("Dokładność (test): ", accuracy(test_data))
-println("Dokładność (train): ", accuracy(train_data))
