@@ -32,12 +32,12 @@ end
 using JLD2
 function saveToFile(weights::Weights, destination::String)
     checkpoint = Checkpoint(weights)
-    save_object(destination, checkpoint)
+    @save destination checkpoint
 end
 
 function loadFromFile(source::String)
-    object = load_object(source)
-    checkpoint = Checkpoint(object.weights, object.datetime)
+    @load source checkpoint
+    checkpoint = Checkpoint(checkpoint.weights, checkpoint.datetime)
     return checkpoint
 end
 end

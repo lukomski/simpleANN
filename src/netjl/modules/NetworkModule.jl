@@ -56,12 +56,12 @@ function update_weights!(x, weights::Weights, y, lr=0.4)
     return nothing
 end
 
-function train(weights::Weights, train, test, epochs::Int)
+function train(weights::Weights, train, test, epochs::Int, lr::Float64)
     for epoch = 1:epochs
         for i = 1:size(train)[1]
             x = Constant(train[i][1])
             y = Constant(train[i][2])
-            update_weights!(x, weights, y)
+            update_weights!(x, weights, y, lr)
         end
     end
     return weights

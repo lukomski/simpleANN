@@ -8,11 +8,19 @@ _Julia lang_
 
 ## Run netjl network
 
+### Start training
+
 ```
 julia src/netjl/main.jl
 ```
 
 or alternatively open the main file and click Run button for Julia REPL
+
+### Show metrics of checkpoint
+
+```
+julia src/netjl/main.jl -m 20220824215915/weight.0
+```
 
 ---
 
