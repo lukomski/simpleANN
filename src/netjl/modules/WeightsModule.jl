@@ -2,7 +2,7 @@ module WeightsModule
 using GraphModule
 export Weights
 export loadFromFile
-
+export saveToFile
 
 struct Weights
     Wh1::Variable
