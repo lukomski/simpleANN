@@ -13,9 +13,10 @@ include("modules/graph.jl")
 include("modules/network.jl")
 
 ############### CONFIGURATION
-dataset = DigitMNIST
+dataset = Iris
 epochs = 5
 lr = 0.4
+tests = 10
 ###############
 
 println("Net started!")
@@ -42,14 +43,18 @@ bo = Variable(randn(out_layer_width), name="bo")
 
 loss_list = []
 
-for epoch in 1:epochs
-    loss = 0.0
-    for i in train_data
-        x = Constant(i[1])
-        y = Constant(i[2])
-        train!(x, Wh1, bh1, Wh2, bh2, Wo, bo, y, lr, loss)
-        push!(loss_list, loss)
+for test in 1:tests
+    for epoch in 1:epochs
+        loss = 0.000000000000
+        for i in train_data
+            x = Constant(i[1])
+            y = Constant(i[2])
+            train!(x, Wh1, bh1, Wh2, bh2, Wo, bo, y, lr, loss)
+            push!(loss_list, loss)
+        end
+        #println("Epoch ", epoch, " Loss is: ", loss, "\n")
+        #println("Epoch ", epoch)
     end
-    #println("Epoch ", epoch, " Loss is: ", loss, "\n")
+    println("Test: ", test)
     metrics(test_data, out_layer_width)
 end
