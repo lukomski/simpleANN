@@ -8,7 +8,7 @@ _Julia lang_
 
 ## Run netjl network
 
-### Start training
+#### Start training
 
 ```
 julia src/netjl/main.jl
@@ -16,10 +16,34 @@ julia src/netjl/main.jl
 
 or alternatively open the main file and click Run button for Julia REPL
 
-### Show metrics of checkpoint
+#### Show metrics of checkpoint
 
 ```
 julia src/netjl/main.jl -m 20220824215915/weight.0
+```
+
+#### Display help
+
+```
+julia src/netjl/main.jl --help
+```
+
+---
+
+### Plotter
+
+Plotter is a tool enable calculating metrics and drawing plots. Both metrics and plots are saved to results directory.
+
+#### Run Plotter
+
+```
+julia src/netjl/plotter/plotter.jl -d 20220903134136
+```
+
+#### Display help for Plotter
+
+```
+julia src/netjl/plotter/plotter.jl --help
 ```
 
 ---
