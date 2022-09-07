@@ -1,4 +1,4 @@
-module Metrics
+module MetricsModule
 export metrics, MetricsStruct
 using Statistics
 

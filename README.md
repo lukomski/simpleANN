@@ -6,7 +6,23 @@ _Julia lang_
 
 ---
 
+The repository contains implementations of two simple ANN networks.
+
+#### File structures:
+
+- src/common - common modules for networks. First of all common interface to get datasets, but also calculating metrices.
+- src/netjl - implementation of netjl network
+- src/netpp - implementation of netpp network
+
 ## Run netjl network
+
+#### The easiest way to start training is calling script
+
+```
+bash src/netjl/scripts/trainAndPlotAll.bash
+```
+
+The script trains netjl network on all implemented datasets with default parameters, calculate metrices and plot results in ouput directory.
 
 #### Start training
 

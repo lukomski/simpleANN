@@ -7,7 +7,6 @@ function parse_commandline()
         "--directory", "-d"
         help = "Output directory"
         required = true
-
     end
 
     return parse_args(s)

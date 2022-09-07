@@ -1,19 +1,18 @@
 include("utils/loader.jl")
 include("utils/argparser.jl")
+include("../common/MetricsModule1.jl")
 
 using Dates
 using JSON
 
 import NetworkModule
 import WeightsModule
-using Metrics
-
 
 function makeTest(test_cases, weights, classes_quantity)
     test_results = NetworkModule.test(test_cases, weights)
     predicted_classes = getindex.(test_results, 2)
     expected_classes = getindex.(test_results, 3)
-    metricsStruct = Metrics.metrics(predicted_classes, expected_classes, classes_quantity)
+    metricsStruct = MetricsModule1.metrics(predicted_classes, expected_classes, classes_quantity)
     println("accuracy: $(metricsStruct.accuracy)")
     println("resut: $(NetworkModule.getStringOfSuccessPercentage(test_cases, weights))")
 end
@@ -26,7 +25,7 @@ getTestDumpsPath = (current_train_directory::String) -> "$(current_train_directo
 getTestDumpFilePath = (epoch::Int64, testDumpsPath::String) -> "$(testDumpsPath)/test_dump_$(epoch).csv"
 
 
-
+return
 
 parsed_args = parse_commandline()
 
@@ -66,7 +65,7 @@ if (!isdir(default_output_folder))
     mkdir(default_output_folder)
 end
 now = Dates.now()
-current_train_directory_name = Dates.format(now, "yyyymmddHHMMSS")
+current_train_directory_name = getName(parsed_args)
 current_train_directory = "$(default_output_folder)/$(current_train_directory_name)"
 
 
@@ -74,6 +73,7 @@ current_train_directory = "$(default_output_folder)/$(current_train_directory_na
 # metrics
 #
 if (parsed_args["metrics"] !== nothing)
+    # Deprecated
     include("utils/metrics.jl")
     exit()
 end
@@ -117,7 +117,8 @@ config = Dict(
     "lr" => lr,
     "epochs" => epochs,
     "datetime" => Dates.format(now, "yyyy-mm-dd HH:MM:SS"),
-    "directory" => current_train_directory_name
+    "directory" => current_train_directory_name,
+    "classes" => classes,
 )
 json_string = JSON.json(config)
 open("$(current_train_directory)/config.json", "a") do io

@@ -66,7 +66,7 @@ function update_weights!(x, weights::Weights, y, lr=0.4, getDump::Function=() ->
             end
         end
         open(dump, "a") do io
-            println(io, join([epoch; onehot_to_digit(y.output); onehot_to_digit(ŷ.output)], ';'))
+            println(io, join([epoch - 1; onehot_to_digit(y.output); onehot_to_digit(ŷ.output)], ';'))
         end
     end
 

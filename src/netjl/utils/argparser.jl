@@ -1,4 +1,5 @@
 using ArgParse
+using Dates
 
 # datasets
 include("../../common/datasets/DigitMNIST.jl")
@@ -32,6 +33,9 @@ function parse_commandline()
         "--plot", "-p"
         help = "Plot metrics for dumps"
 
+        "--name", "-n"
+        help = "Name of the trainig"
+        default = Dates.format(Dates.now(), "yyyymmddHHMMSS")
     end
 
     return parse_args(s)
@@ -54,4 +58,8 @@ end
 
 function getEpochs(parsed_args)
     return parsed_args["epochs"]
+end
+
+function getName(parsed_args)
+    return parsed_args["name"]
 end
