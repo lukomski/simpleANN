@@ -77,3 +77,7 @@ cd src/netpp
 ```
 julia main.jl
 ```
+
+
+### Output files can be found at the link:
+https://drive.google.com/drive/folders/1QpIz8T4zEhT9N6-xRfVMr2lZZCkgH4XU?usp=sharing
