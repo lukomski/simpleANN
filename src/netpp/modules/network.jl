@@ -3,6 +3,8 @@
 ###
 
 using Statistics
+import JSON
+import Dates
 
 get_class(y::Vector) = argmax(y) - 1
 
@@ -27,9 +29,6 @@ function metrics(data_set, number_of_classes)
     prediction_list_all = zeros(number_of_classes)
     prediction_list_correct = zeros(number_of_classes)
     correct_list_all = zeros(number_of_classes)
-    #println(prediction_list_all)
-    #println(prediction_list_correct)
-    #println(correct_list_all)
 
     for i in data_set
         prediction = predict(Constant(i[1]), Wh1, bh1, Wh2, bh2, Wo, bo)
@@ -41,10 +40,6 @@ function metrics(data_set, number_of_classes)
             prediction_list_correct[prediction + 1] += 1
         end
     end
-
-    println(prediction_list_all)
-    println(prediction_list_correct)
-    println(correct_list_all)
 
     data_set_size = length(data_set)
     precision = mean(prediction_list_correct./prediction_list_all)
@@ -87,4 +82,63 @@ function train!(x, Wh1, bh1, Wh2, bh2, Wo, bo, y, lr, loss)
     Wo.output -= lr .* Wo.gradient
     bo.output -= lr .* bo.gradient
     return nothing
+end
+
+
+function test(data_sets)
+    predicted_classes = []
+    expected_classes = []
+    for x in data_sets
+        predicted_class = predict(Constant(x[1]), Wh1, bh1, Wh2, bh2, Wo, bo)
+        expected_class = argmax(x[2]) - 1
+        push!(predicted_classes, predicted_class)
+        push!(expected_classes, expected_class)
+    end
+    return zip(data_sets, predicted_classes, expected_classes)
+end
+
+function save_test_dump(data_set, data_set_name::String, test_number::Int, epoch::Int)
+    test_results = test(data_set)
+    predicted_classes = getindex.(test_results, 2)
+    expected_classes = getindex.(test_results, 3)
+    dump = get_dump_path(data_set_name, test_number, epoch)
+
+    headers = ["epoch", "expected_class", "predicted_class"]
+    open(dump, "a") do io
+        println(io, join(headers, ';'))
+        for idx = 1:size(predicted_classes)[1]
+            expected_class = expected_classes[idx]
+            predicted_class = predicted_classes[idx]
+            println(io, join([epoch; expected_class; predicted_class], ';'))
+        end
+    end
+end
+
+now = Dates.now()
+timestamp = Dates.format(now, "yyyy-mm-dd-HH-MM-SS")
+println("Output directory: $timestamp")
+output_path = "$(pwd())/outputs/$(timestamp)"
+mkpath(output_path)
+
+function get_dump_path(name::String, test_number::Int, epoch::Int64)
+    path = "$(output_path)/$(name)_dumps/$test_number"
+    mkpath(path)
+    return "$path/$epoch.csv"
+end
+
+function create_config_file()
+    config = Dict(
+        "dataset" => dataset.getName(),
+        "lr" => lr,
+        "epochs" => epochs,
+        "datetime" => Dates.format(now, "yyyy-mm-dd HH:MM:SS"),
+        "directory" => output_path,
+        "classes" => classes,
+        "tests" => tests
+    )
+    json_string = JSON.json(config)
+    open("$(output_path)/config.json", "a") do io
+        println(io, json_string)
+end
+
 end 
