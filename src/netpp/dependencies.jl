@@ -9,7 +9,10 @@ dependencies = [
     "Plotly",
     "JSON",
     "MLDatasets",
-    "ArgParse"
+    "ArgParse",
+    "Shuffle",
+    "Metrics",
+    "Plots",
 ]
 
 Pkg.add(dependencies)

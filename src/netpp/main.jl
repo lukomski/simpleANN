@@ -4,15 +4,15 @@
 #   
 ####
 
-push!(LOAD_PATH, "$(pwd())/../common/datasets")
+push!(LOAD_PATH, "$(pwd())/src/common/datasets")
 import DigitMNIST
 import FashionMNIST
 import Iris
 
-include("$(pwd())/../common/MetricsModule1.jl")
+include("$(pwd())/src/common/MetricsModule1.jl")
 
-include("modules/graph.jl")
-include("modules/network.jl")
+include("./modules/graph.jl")
+include("./modules/network.jl")
 
 ############### CONFIGURATION
 dataset = Iris
@@ -51,6 +51,10 @@ loss = 0.0
 for test in 1:tests
     save_test_dump(train_data, "train", test, 0)
     save_test_dump(test_data, "test", test, 0)
+    print("\n\n")
+    println("\nTest: ", test, "\n")
+    println("Metrics before trainings")
+    metrics(test_data, out_layer_width)
     for epoch in 1:epochs
         for i in train_data
             x = Constant(i[1])
@@ -60,6 +64,6 @@ for test in 1:tests
             save_test_dump(test_data, "test", test, epoch)
         end
     end
-    println("Test: ", test)
+    print("\n")
     metrics(test_data, out_layer_width)
 end

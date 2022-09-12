@@ -117,7 +117,7 @@ end
 now = Dates.now()
 timestamp = Dates.format(now, "yyyy-mm-dd-HH-MM-SS")
 println("Output directory: $timestamp")
-output_path = "$(pwd())/outputs/$(timestamp)"
+output_path = "$(pwd())/src/netpp/outputs/$(timestamp)"
 mkpath(output_path)
 
 function get_dump_path(name::String, test_number::Int, epoch::Int64)

@@ -53,7 +53,7 @@ Plotter is a tool enable calculating metrics and drawing plots. Both metrics and
 #### Run Plotter
 
 ```
-julia src/netjl/plotter/plotter.jl -d 20220903134136
+julia src/netjl/plotter/plotter.jl -d 20220803134136
 ```
 
 #### Display help for Plotter
@@ -66,16 +66,22 @@ julia src/netjl/plotter/plotter.jl --help
 
 ## Run netpp network
 
-### 1. Go to src/netpp directory
+### 1. Install all dependencies
 
 ```
-cd src/netpp
+julia src/netpp/dependencies.jl
 ```
 
 ### 2. Run main script
 
 ```
-julia main.jl
+julia src/netpp/main.jl
+```
+
+### 2. Run plotter
+
+```
+julia src/common/plotter/plotter.jl -d <directory> -n netpp
 ```
 
 
