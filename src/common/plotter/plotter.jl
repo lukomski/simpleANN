@@ -1,5 +1,5 @@
-include("./argparser.jl")
-include("../MetricsModule1.jl")
+include("argparser.jl")
+include("../../common/MetricsModule1.jl")
 include("./metricsSaver.jl")
 
 parsed_args = parse_commandline()
@@ -13,23 +13,16 @@ using JSON
 
 default_outputs_path = "./src/$(parsed_args["net"])/outputs"
 output_path = "$(default_outputs_path)/$(parsed_args["directory"])"
-train_dumps_path = "$(output_path)/train_dumps"
-test_dumps_path = "$(output_path)/test_dumps"
+train_dumps_path = "$(output_path)/train_dumps/1"
+test_dumps_path = "$(output_path)/test_dumps/1"
 results_path = "$(output_path)/results"
 config_file_path = "$(output_path)/config.json"
 
-config = JSON.parsefile(config_file_path)
-classes = config["classes"]
-tests = config["tests"]
+
+classes = JSON.parsefile(config_file_path)["classes"]
 number_of_classes = length(classes)
 
-metrics_sets = []
-for test in tests
-    push!(metrics_sets, calculate_metrics(test))
-end
-
-metrics = calculate_mean_metrics(metrics_sets)
-train_epochs = metrics_sets[1].train_epochs
+test_epochs, train_epochs, metrics = calculate_and_save_metrics()
 
 vvv = []
 

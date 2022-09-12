@@ -18,7 +18,7 @@ include("./modules/network.jl")
 dataset = Iris
 epochs = 5
 lr = 0.4
-tests = 10
+tests = 1
 ###############
 
 println("Net started!")
@@ -38,6 +38,9 @@ println("test dataset size: $(size(test_data))")
 first_layer_width = size(train_data[1][1])[1]
 out_layer_width = size(classes)[1]
 
+loss_list = []
+loss = 0.0
+
 Wh1 = Variable(randn(32, first_layer_width), name="Wh1")
 bh1 = Variable(randn(32), name="bh1")
 Wh2 = Variable(randn(32,32), name="Wh2")
@@ -45,10 +48,8 @@ bh2 = Variable(randn(32), name="bh2")
 Wo = Variable(randn(out_layer_width,32), name="Wo")
 bo = Variable(randn(out_layer_width), name="bo")
 
-loss_list = []
-loss = 0.0
-
 for test in 1:tests
+
     save_test_dump(train_data, "train", test, 0)
     save_test_dump(test_data, "test", test, 0)
     print("\n\n")
@@ -60,9 +61,9 @@ for test in 1:tests
             x = Constant(i[1])
             y = Constant(i[2])
             train!(x, Wh1, bh1, Wh2, bh2, Wo, bo, y, lr, loss)
-            save_test_dump(train_data, "train", test, epoch)
-            save_test_dump(test_data, "test", test, epoch)
         end
+        save_test_dump(train_data, "train", test, epoch)
+        save_test_dump(test_data, "test", test, epoch)
     end
     print("\n")
     metrics(test_data, out_layer_width)

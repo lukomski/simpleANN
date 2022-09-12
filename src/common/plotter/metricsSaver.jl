@@ -1,12 +1,5 @@
 
 
-mutable struct MetricsSetStruct
-    test_epochs::Any
-    train_epochs::Any
-    metrics::Dict
-    MetricsSetStruct(test_epochs, train_epochs, metrics) = new(test_epochs, train_epochs, metrics)
-end
-
 # Function loading dataframes from directory
 function load_dataframes(directory)
     local dataframes = []
@@ -25,8 +18,6 @@ function load_metrics_structs(dataframes)
     for dataframe in dataframes
         local predicted_classes = dataframe."predicted_class"
         local expected_classes = dataframe."expected_class"
-        println(typeof(predicted_classes))
-        println(typeof(expected_classes))
         # println("predicted_classes: $(size(predicted_classes)), expected_classes: $(size(expected_classes)), number_of_classes: $(number_of_classes)")
         local metrics_struct = MetricsModule1.metrics(predicted_classes, expected_classes, number_of_classes)
         push!(metrics_structs, metrics_struct)
@@ -54,9 +45,9 @@ function get_metrics(metrics_datastructs, getMetrics::Function)
     return metrics
 end
 
-function calculate_metrics(test::Int64)
-    local train_dataframes = load_dataframes("$train_dumps_path/$test")
-    local test_dataframes = load_dataframes("$test_dumps_path/$test")
+function calculate_and_save_metrics()
+    local train_dataframes = load_dataframes(train_dumps_path)
+    local test_dataframes = load_dataframes(test_dumps_path)
 
     println("test_dataframes: $(size(test_dataframes))")
 
@@ -92,54 +83,7 @@ function calculate_metrics(test::Int64)
             "test" => get_metrics(test_metrics_datastructs, (md) -> md.confussion_matrix)
         ),
     )
-    return MetricsSetStruct(test_epochs, train_epochs, metrics)
-end
 
-function calculate_mean_metrics(metrics_sets)
-    accuracy_set_test = []
-    accuracy_set_train = []
-    precision_set_test = []
-    precision_set_train = []
-    recall_set_test = []
-    recall_set_train = []
-    f1_set_test = []
-    f1_set_train = []
-    for metrics_set in metrics_sets
-        push!(accuracy_set_test, metrics_set["Accuracy"]["test"])
-        push!(accuracy_set_train, metrics_set["Accuracy"]["train"])
-        push!(precision_set_test, metrics_set["Precision"]["test"])
-        push!(precision_set_train, metrics_set["Precision"]["train"])
-        push!(recall_set_test, metrics_set["Recall"]["test"])
-        push!(recall_set_train, metrics_set["Recall"]["train"])
-        push!(f1_set_test, metrics_set["F1"]["test"])
-        push!(f1_set_train, metrics_set["F1"]["train"])
-    end
-    return Dict(
-        "Accuracy" => Dict(
-            "train" => mean(accuracy_set_test),
-            "test" => mean(accuracy_set_train),
-            "plot" => true
-        ),
-        "Precision" => Dict(
-            "train" => mean(precision_set_test),
-            "test" => mean(precision_set_train),
-            "plot" => true
-        ),
-        "Recall" => Dict(
-            "train" => mean(recall_set_test),
-            "test" => mean(recall_set_train),
-            "plot" => true
-        ),
-        "F1" => Dict(
-            "train" => mean(f1_set_test),
-            "test" => mean(f1_set_train),
-            "plot" => true
-        ),
-        "Confussion matrix" => metrics_sets[length(metrics_sets)]["Confussion matrix"]
-        )
-end
-
-function save_metrics()
     if (!isdir(results_path))
         mkdir(results_path)
     end
@@ -148,6 +92,8 @@ function save_metrics()
     open("$(results_path)/metrics.json", "w") do io
         println(io, json_string)
     end
+
+    return [test_epochs, train_epochs, metrics]
 end
 
 # Deprecated function - use python script to plot confussion matrix
