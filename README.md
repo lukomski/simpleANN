@@ -1,5 +1,7 @@
 # Simple Artificial Neural Networks
 
+Link to github reposiory: https://github.com/lukomski/simpleANN/
+
 _Julia lang_
 
 ![Julia lang Logo](docs/julia-lang.png "Julia Logo")
