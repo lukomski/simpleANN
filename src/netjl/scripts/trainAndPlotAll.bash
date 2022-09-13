@@ -16,7 +16,7 @@ for DATASET in ${DATASETS[@]}; do
     julia src/netjl/main.jl -d ${DATASET} -e ${EPOCHS} -n ${NAME}
 
     echo "====> Starting plotter for $NAME"
-	  julia src/netjl/plotter/plotter.jl -d ${NAME}
+	  julia src/common/plotter/plotter.jl -d ${NAME} -n netjl
 
     echo "====> Starting plotting confussion matrixes for $NAME"
     python src/netjl/scripts/plotConfussionMatrics.py \

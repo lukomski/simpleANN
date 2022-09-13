@@ -46,24 +46,6 @@ julia src/netjl/main.jl --help
 
 ---
 
-### Plotter
-
-Plotter is a tool enable calculating metrics and drawing plots. Both metrics and plots are saved to results directory.
-
-#### Run Plotter
-
-```
-julia src/netjl/plotter/plotter.jl -d 20220803134136
-```
-
-#### Display help for Plotter
-
-```
-julia src/netjl/plotter/plotter.jl --help
-```
-
----
-
 ## Run netpp network
 
 ### 1. Install all dependencies
@@ -78,12 +60,26 @@ julia src/netpp/dependencies.jl
 julia src/netpp/main.jl
 ```
 
-### 2. Run plotter
+## Plotter
+
+Plotter is a tool enable calculating metrics and drawing plots. Both metrics and plots are saved to results directory.
+
+### Run Plotter
+
+Example for netpp network:
 
 ```
-julia src/common/plotter/plotter.jl -d <directory> -n netpp
+julia src/netjl/plotter/plotter.jl -d 20220803134136 -n netpp
 ```
 
+#### Display help for Plotter
+
+```
+julia src/netjl/plotter/plotter.jl --help
+```
+
+---
 
 ### Output files can be found at the link:
+
 https://drive.google.com/drive/folders/1QpIz8T4zEhT9N6-xRfVMr2lZZCkgH4XU?usp=sharing
