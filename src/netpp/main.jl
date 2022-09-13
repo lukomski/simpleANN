@@ -16,7 +16,7 @@ include("./modules/network.jl")
 
 ############### CONFIGURATION
 dataset = DigitMNIST
-epochs = 2
+epochs = 5
 lr = 0.4
 tests = 1
 ###############
