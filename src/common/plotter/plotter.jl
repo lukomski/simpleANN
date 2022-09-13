@@ -13,8 +13,8 @@ using JSON
 
 default_outputs_path = "./src/$(parsed_args["net"])/outputs"
 output_path = "$(default_outputs_path)/$(parsed_args["directory"])"
-train_dumps_path = "$(output_path)/train_dumps/1"
-test_dumps_path = "$(output_path)/test_dumps/1"
+train_dumps_path = "$(output_path)/train_dumps/"
+test_dumps_path = "$(output_path)/test_dumps/"
 results_path = "$(output_path)/results"
 config_file_path = "$(output_path)/config.json"
 

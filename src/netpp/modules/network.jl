@@ -121,7 +121,8 @@ output_path = "$(pwd())/src/netpp/outputs/$(timestamp)"
 mkpath(output_path)
 
 function get_dump_path(name::String, test_number::Int, epoch::Int64)
-    path = "$(output_path)/$(name)_dumps/$test_number"
+    #path = "$(output_path)/$(name)_dumps/$test_number"
+    path = "$(output_path)/$(name)_dumps"
     mkpath(path)
     return "$path/$epoch.csv"
 end

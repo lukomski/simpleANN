@@ -15,8 +15,8 @@ include("./modules/graph.jl")
 include("./modules/network.jl")
 
 ############### CONFIGURATION
-dataset = Iris
-epochs = 5
+dataset = DigitMNIST
+epochs = 2
 lr = 0.4
 tests = 1
 ###############
@@ -49,7 +49,6 @@ Wo = Variable(randn(out_layer_width,32), name="Wo")
 bo = Variable(randn(out_layer_width), name="bo")
 
 for test in 1:tests
-
     save_test_dump(train_data, "train", test, 0)
     save_test_dump(test_data, "test", test, 0)
     print("\n\n")
