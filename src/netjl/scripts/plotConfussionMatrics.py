@@ -61,6 +61,27 @@ f = open(args.metrics_file, "r")
 data = json.loads(f.read())
 f.close()
 
+#from pprint import pprint
+del(labels[0])
+#pprint(labels)
+#pprint(data['Confussion matrix']['test'][0])
+#exit()
+
+# Delete rows with only 0
+#print(len(data['Confussion matrix']['test']))
+for i in range(0, len(data['Confussion matrix']['test'])):
+    del(data['Confussion matrix']['test'][i][len(data['Confussion matrix']['test'][i])-1])
+    for j in range(0, len(data['Confussion matrix']['test'][i])):
+        del(data['Confussion matrix']['test'][i][j][0])
+
+for i in range(0, len(data['Confussion matrix']['train'])):
+    del(data['Confussion matrix']['train'][i][len(data['Confussion matrix']['train'][i])-1])
+    for j in range(0, len(data['Confussion matrix']['train'][i])):
+        del(data['Confussion matrix']['train'][i][j][0])
+
+#pprint(data['Confussion matrix']['test'][0])
+#exit()
+
 for idx, cm_test in enumerate(data['Confussion matrix']['test']):
     output_file = f'{out_files_directory_path}cm_test_{idx}.png'
     saveMatrix(cm_test, labels, output_file)
